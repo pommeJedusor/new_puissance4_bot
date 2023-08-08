@@ -2,6 +2,36 @@
 #include <stdio.h>
 #include "funcs.h"
 
+char order_change(char i)
+{
+    if (i==0)
+    {
+        return 3;
+    }
+    if (i==1)
+    {
+        return 4;
+    }
+    if (i==3)
+    {
+        return 5;
+    }
+    if (i==4)
+    {
+        return 1;
+    }
+    if (i==5)
+    {
+        return 0;
+    }
+    //if i==6 or 2 return it
+    else
+    {
+        return i;
+    }
+
+}
+
 void deeper(Grid* grid,char deep)
 {
     if (grid->score != 100)
@@ -64,6 +94,7 @@ void deeper(Grid* grid,char deep)
         char child_number = 0;
         for (char i=0; i<7; i++)
         {
+            i = order_change(i);
             if (is_playing_column(grid->grid, i) == 0)
             {
                 continue;
@@ -87,13 +118,13 @@ void deeper(Grid* grid,char deep)
                 else
                 {
                     grid->score = 1;
-                    for (char i=0;i<42;i++)
+                    for (char j=0;j<42;j++)
                     {
-                        if (i%7==0)
+                        if (j%7==0)
                         {
                             printf("\n");
                         }
-                        printf("%d",grid->grid[i]);
+                        printf("%d",grid->grid[j]);
                     }
                     printf("\n");
                 }
@@ -109,6 +140,7 @@ void deeper(Grid* grid,char deep)
         grid->children = malloc(sizeof(Grid)*grid->nb_children);
         for (char i=0; i<7; i++)
         {
+            i = order_change(i);
             if (is_playing_column(grid->grid, i) == 1)
             {
                 //printf("lancement make_child\n");
