@@ -72,8 +72,11 @@ int test(char* file_name)
 
         }
         Grid* grid = grid_init(file_contents+ex_file_pos, game_len);
+        printf("score: %d\n",score);
         result = connect4(grid);
+        printf("result %d\n",result);
         score*=more_less;
+        free(grid);
 
         total_test++;
         if (result==score)
@@ -99,4 +102,24 @@ int test(char* file_name)
 int test_1()
 {
     return test("connectfourtest/Test_L3_R1");
+}
+int test_2()
+{
+    return test("connectfourtest/Test_L2_R2");
+}
+int test_3()
+{
+    return test("connectfourtest/Test_L2_R1");
+}
+int test_4()
+{
+    return test("connectfourtest/Test_L1_R3");
+}
+int test_5()
+{
+    return test("connectfourtest/Test_L1_R2");
+}
+int test_6()
+{
+    return test("connectfourtest/Test_L1_R1");
 }
