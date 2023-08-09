@@ -4,17 +4,20 @@
 typedef struct Grid Grid;
 struct Grid
 {
-    char* grid;
+    long position: 49;
+    long mask: 49;
     char local_deep;
     //score=100 si indéterminé
     char score;
     char nb_children;
-    char player;
     Grid* children;
 };
+
+char can_play(Grid* grid, char column);
+void play(Grid* grid, char column);
+void see_grid(Grid* grid);
+char is_losing(Grid* grid);
 Grid* grid_init(char* game, char len_game);
-char is_playing_column(char* grid, char column);
-char is_winning_move(char* grid, char col, char player);
 void make_child(Grid* grid, char move, Grid* child);
 
 #endif
