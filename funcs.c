@@ -128,5 +128,5 @@ void make_child(Grid* grid, char move, Grid* child)
     child->score = 100;
     child->nb_children = 0;
     //make the move
-    play(child, move)
+    play(child, move);
 }

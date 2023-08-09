@@ -5,54 +5,41 @@
 char order_change(char i)
 {
     if (i==0)
-    {
-        return 3;
-    }
+    {return 3;}
     if (i==1)
-    {
-        return 4;
-    }
+    {return 4;}
+    if (i==2)
+    {return 2;}
     if (i==3)
-    {
-        return 5;
-    }
+    {return 5;}
     if (i==4)
-    {
-        return 1;
-    }
+    {return 1;}
     if (i==5)
-    {
-        return 0;
-    }
-    //if i==6 or 2 return it
-    else
-    {
-        return i;
-    }
+    {return 0;}
+    if (i==6)
+    {return 6;}
 
 }
 
 void deeper(Grid* grid,char deep)
 {
+    //if already evaluated
     if (grid->score != 100)
     {
         return;
     }
+    //if already have children
     else if (grid->local_deep < deep)
     {
-        char all_child_noted;
         for (int i=0; i<grid->nb_children; i++)
         {
-            printf("lance deeper récursive\n");
-            printf("test: %d\n",grid->children[i].score);
             deeper(&grid->children[i], deep);
-            printf("test: %d\n",grid->children[i].score);
-            printf("fin deeper récursive\n");
         }
         //try to find the score of the grid
         char max_negatif = -100;
         char max = -100;
-        all_child_noted = 1;
+        char all_child_noted = 1;
+        char null_atleast = 0;
         for (int i=0; i<grid->nb_children; i++)
         {
             if (grid->children[i].score == 100)
@@ -67,17 +54,28 @@ void deeper(Grid* grid,char deep)
             {
                 max_negatif = grid->children[i].score;
             }
+            if (grid->children[i].score == 0)
+            {
+                null_atleast=1;
+            }
         }
         if (all_child_noted==1 || max_negatif!=-100)
         {
+            //if a child_score under 0
             if (max_negatif!=-100)
             {
                 grid->score = max_negatif;
+            }
+            //else if a child_score == 0
+            else if (null_atleast)
+            {
+                grid->score = 0;
             }
             else
             {
                 grid->score = max;
             }
+            //change the score to give to the parent
             grid->score *= -1;
             if (grid->score>0)
             {
@@ -89,78 +87,48 @@ void deeper(Grid* grid,char deep)
             }
         }
     }
+    //if doeasn't have any child
     else if (grid->local_deep == deep)
     {
-        char child_number = 0;
+        //if the position of the grid is losing
+        if (is_losing(grid))
+        {
+            grid->score = -1;
+            return;
+        }
+        //count the number of possible moves
         for (char i=0; i<7; i++)
         {
-            i = order_change(i);
-            if (is_playing_column(grid->grid, i) == 0)
+            if (can_play(grid, i))
             {
-                continue;
-            }
-            else if (is_winning_move(grid->grid, i, grid->player) == 1)
-            {
-                printf("win!!! %d\nplayer: %d\n",i,grid->player);
-                if (grid->player == 1)
-                {
-                    grid->score = 1;
-                    for (char i=0;i<42;i++)
-                    {
-                        if (i%7==0)
-                        {
-                            printf("\n");
-                        }
-                        printf("%d",grid->grid[i]);
-                    }
-                    printf("\nlocal deep: %d, score: %d\n",grid->local_deep, grid->score);
-                }
-                else
-                {
-                    grid->score = 1;
-                    for (char j=0;j<42;j++)
-                    {
-                        if (j%7==0)
-                        {
-                            printf("\n");
-                        }
-                        printf("%d",grid->grid[j]);
-                    }
-                    printf("\n");
-                }
-                printf("move: %d\n",i);
-                grid->nb_children=0;
-                return;
-            }
-            else
-            {
-                grid->nb_children++;
+                grid->nb_children++;;
             }
         }
+        //make the children of the grid
+        char better_i;
+        char child_number = 0;
         grid->children = malloc(sizeof(Grid)*grid->nb_children);
         for (char i=0; i<7; i++)
         {
-            i = order_change(i);
-            if (is_playing_column(grid->grid, i) == 1)
+            better_i = order_change(i);
+            if (can_play(grid, better_i))
             {
-                //printf("lancement make_child\n");
-                make_child(grid, i, &grid->children[child_number]);
-                //printf("fin make_child\n");
+                make_child(grid, better_i, &grid->children[child_number]);
                 child_number++;
             }
+        }
+        if (child_number!=grid->nb_children)
+        {
+            printf("wtf\n");
         }
     }
 }
 
 int connect4(Grid* grid)
 {
-    //printf("score: %d\n",grid->score);
     for (int i=grid->local_deep; i<=42; i++)
     {
-        //printf("lance fonction deeper ld: %d\n",i);
-        printf("lance deeper: n°%d\n",i);
         deeper(grid, i);
-        //printf("fin fonction deeper\n");
         //if grid solved
         if (grid->score != 100)
         {
