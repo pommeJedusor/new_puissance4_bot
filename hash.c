@@ -72,7 +72,6 @@ char get_score(Grid* grid)
     }
     if (hash_table[hash]->key == input->key)
     {
-        grid->score = hash_table[hash]->score;
         grid->alpha = hash_table[hash]->score;
         free(input);
         return 1;

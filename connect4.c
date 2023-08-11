@@ -59,16 +59,15 @@ void deeper(Grid* grid)
             }
             if (score >= grid->beta)
             {
-                make_input(grid);
                 return;
             }
             if (score > grid->alpha)
             {
                 grid->alpha = score;
+                make_input(grid);
             }
         }
     }
-    make_input(grid);
 }
 
 int connect4(Grid* grid)
