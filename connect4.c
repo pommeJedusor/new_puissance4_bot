@@ -39,7 +39,8 @@ void deeper(Grid* grid)
     //make the move
     Grid* child;
     char column;
-    char min = 100;
+    char score;
+    grid->score = -100;
     for (char i=0;i<7;i++)
     {
         column = order_change(i);
@@ -48,15 +49,21 @@ void deeper(Grid* grid)
             child = malloc(sizeof(Grid));
             make_child(grid, column, child);
             deeper(child);
-            //alreadry start calculing the score of the parent
-            if (child->score < min)
+            score = -child->score;
+            if (score > grid->score)
             {
-                min = child->score;
+                grid->score = score;
+            }
+            if (score >= grid->beta)
+            {
+                return;
+            }
+            if (score > grid->alpha)
+            {
+                grid->alpha = score;
             }
         }
     }
-    //calculate the score of the grid
-    grid->score = -min;
 }
 
 int connect4(Grid* grid)

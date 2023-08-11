@@ -65,16 +65,16 @@ int test(char* file_name)
             }
             if (file_contents[file_pos]=='\0')
             {
-                printf("yop");
+                //printf("yop");
                 break;
             }
             file_pos++;
 
         }
         Grid* grid = grid_init(file_contents+ex_file_pos, game_len);
-        printf("score: %d\n",score);
+        //printf("score: %d\n",score);
         result = connect4(grid);
-        printf("result %d\n",result);
+        //printf("result %d\n",result);
         score*=more_less;
         free(grid);
 
@@ -82,7 +82,9 @@ int test(char* file_name)
         if (result==score)
         {
             total_score++;
+            printf("1\n");
         }
+        else printf("0\n");
 
 
         if (file_contents[file_pos]=='\0')

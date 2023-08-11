@@ -17,11 +17,13 @@ void see_tree(Grid* grid)
 
 char get_move(Grid* grid)
 {
+    char column;
     for (char i=0;i<7;i++)
     {
-        if (grid->children[i]!=NULL && grid->children[i]->score==-grid->score)
+        column = order_change(i);
+        if (grid->children[column]!=NULL && grid->children[column]->score==-grid->score)
         {
-            return i+1;
+            return column+1;
         }
     }
     return 10;
@@ -44,9 +46,8 @@ void get_moves(Grid* grid)
 
 void main()
 {
-    /*
-    char len_game = 26;
-    char* game_1 = "44444432655555323332267623";
+    /*char len_game = 17;
+    char* game_1 = "44444432655555367";
     Grid* grid;
     grid = grid_init(game_1, len_game);
     printf("score: %d\n",connect4(grid));
@@ -59,4 +60,5 @@ void main()
     printf("the move: %d\n",get_move(grid));
     */
     test_1();
+    test_3();
 }

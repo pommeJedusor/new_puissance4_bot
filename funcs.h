@@ -10,6 +10,8 @@ struct Grid
     //score=22 - nombre de coups joué par le joueur
     char score;
     char nb_children;
+    char alpha;
+    char beta;
     Grid** children;
 };
 
