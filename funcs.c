@@ -7,10 +7,10 @@ struct Grid
     long position: 49;
     long mask: 49;
     char local_deep;
-    //score=100 si indéterminé
+    //score=22 - nombre de coups joué par le joueur
     char score;
     char nb_children;
-    Grid* children;
+    Grid** children;
 };
 
 
@@ -103,8 +103,13 @@ Grid* grid_init(char* game, char len_game)
     Grid* grid;
     grid = malloc(sizeof(Grid));
     grid->local_deep = len_game;
-    grid->score = 100;
     grid->nb_children = 0;
+    //children
+    grid->children = malloc(sizeof(Grid*)*7);
+    for (char i=0;i<7;i++)
+    {
+        grid->children[i]=NULL;
+    }
     //clear the columns
     grid->mask = 0;
     grid->position = 0;
@@ -120,12 +125,18 @@ Grid* grid_init(char* game, char len_game)
 
 void make_child(Grid* grid, char move, Grid* child)
 {
+    grid->children[move] = child;
     //copy the grid
     child->mask = grid->mask;
     child->position = grid->position;
 
+    child->children = malloc(sizeof(Grid*)*7);
+    for (char i=0;i<7;i++)
+    {
+        child->children[i]=NULL;
+    }
+
     child->local_deep = grid->local_deep+1;
-    child->score = 100;
     child->nb_children = 0;
     //make the move
     play(child, move);

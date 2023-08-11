@@ -7,10 +7,10 @@ struct Grid
     long position: 49;
     long mask: 49;
     char local_deep;
-    //score=100 si indéterminé
+    //score=22 - nombre de coups joué par le joueur
     char score;
     char nb_children;
-    Grid* children;
+    Grid** children;
 };
 
 char can_play(Grid* grid, char column);

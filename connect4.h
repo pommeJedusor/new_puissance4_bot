@@ -3,7 +3,7 @@
 #define CONNECT_FOUR_H
 
 char order_change(char i);
-void deeper(Grid* grid,char deep);
+void deeper(Grid* grid);
 int connect4(Grid* grid);
 
 #endif

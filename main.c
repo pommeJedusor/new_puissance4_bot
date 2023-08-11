@@ -11,63 +11,52 @@ void see_tree(Grid* grid)
     see_grid(grid);
     for (int i=0;i<grid->nb_children;i++)
     {
-        see_tree(&grid->children[i]);
+        see_tree(grid->children[i]);
     }
 }
 
 char get_move(Grid* grid)
 {
-    long move;
-    Grid* child;
-    char child_score = grid->score;
-    if (child_score > 0)
+    for (char i=0;i<7;i++)
     {
-        child_score -=1;
-        child_score *=-1;
-    }
-    else if (child_score < 0)
-    {
-        child_score +=1;
-        child_score *=-1;
-    }
-    for (int i=0;i<grid->nb_children;i++)
-    {
-        //printf("child score %d\nthe other child score: %d\n",grid->children[i].score,child_score);
-        if (child_score==grid->children[i].score)
+        if (grid->children[i]!=NULL && grid->children[i]->score==-grid->score)
         {
-            move = grid->mask ^ grid->children[i].mask;
-            printf("i: %d\nmove: %ld\n",i,move);
-            if (move <= 64)
-            {return 0;}
-            if (move <= 8192)
-            {return 1;}
-            if (move <= 1048576)
-            {return 2;}
-            if (move <= 134217728)
-            {return 3;}
-            if (move <= 17179869184)
-            {return 4;}
-            if (move <= 2199023255552)
-            {return 5;}
-            if (move <= 281474976710656)
-            {return 6;}
-            return 7;
+            return i+1;
         }
     }
-    return 7;
+    return 10;
+}
+
+void get_moves(Grid* grid)
+{
+    for (char i=0;i<7;i++)
+    {
+        if (grid->children[i]==NULL)
+        {
+            printf("move: %d null\n",i);
+        }
+        else
+        {
+            printf("move: %d score: %d\n", i, grid->children[i]->score);
+        }
+    }
 }
 
 void main()
 {
+    /*
     char len_game = 26;
-    char* game_1 = "46612371375417426432243354";
+    char* game_1 = "44444432655555323332267623";
     Grid* grid;
     grid = grid_init(game_1, len_game);
+    printf("score: %d\n",connect4(grid));
+    see_grid(grid);
+    printf("move: %d\n",get_move(grid));
+    get_moves(grid);
+    /*
     char result = connect4(grid);
     printf("local deep: %d\nfinal result: %d\n",grid->local_deep, result);
-    //see_tree(grid);
-    //printf("result: %d\nlocal deep: %d\n",result,grid->local_deep);
     printf("the move: %d\n",get_move(grid));
-    
-    //test_1();
+    */
+    test_1();
 }
