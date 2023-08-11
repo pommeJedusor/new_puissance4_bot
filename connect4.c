@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "funcs.h"
+#include "hash.h"
 
 char order_change(char i)
 {
@@ -35,12 +36,14 @@ void deeper(Grid* grid)
         grid->score = 0;
         return;
     }
+    //check the hash table
+    grid->score = -100;
+    get_score(grid);
     //else
     //make the move
     Grid* child;
     char column;
     char score;
-    grid->score = -100;
     for (char i=0;i<7;i++)
     {
         column = order_change(i);
@@ -56,6 +59,7 @@ void deeper(Grid* grid)
             }
             if (score >= grid->beta)
             {
+                make_input(grid);
                 return;
             }
             if (score > grid->alpha)
@@ -64,6 +68,7 @@ void deeper(Grid* grid)
             }
         }
     }
+    make_input(grid);
 }
 
 int connect4(Grid* grid)

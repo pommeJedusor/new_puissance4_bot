@@ -3,6 +3,7 @@
 #include "funcs.h"
 #include "test.h"
 #include "connect4.h"
+#include "hash.h"
 
 void see_tree(Grid* grid)
 {
@@ -46,8 +47,10 @@ void get_moves(Grid* grid)
 
 void main()
 {
-    /*char len_game = 17;
-    char* game_1 = "44444432655555367";
+    
+    init_hash_table();
+    char len_game = 12;
+    char* game_1 = "444444326552";
     Grid* grid;
     grid = grid_init(game_1, len_game);
     printf("score: %d\n",connect4(grid));
@@ -59,6 +62,6 @@ void main()
     printf("local deep: %d\nfinal result: %d\n",grid->local_deep, result);
     printf("the move: %d\n",get_move(grid));
     */
-    test_1();
-    test_3();
+    //test_1();
+    //test_3();
 }
