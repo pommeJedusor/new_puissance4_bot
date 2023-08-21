@@ -25,6 +25,13 @@ char order_change(char i)
 
 char deeper(long mask, long position, char local_deep, char alpha, char beta, char move)
 {
+    //check if the deep is still worth it
+    char best_possible_score = (22 - ((local_deep+1)/2.0));
+    if (best_possible_score < alpha)
+    {
+        return -100;
+    }
+    
     play(&position, &mask, move);
     int score = -100;
     if (is_losing(position, mask))
@@ -98,6 +105,7 @@ int connect4(char* game, char len_game, char* best_move)
             if (child_score > score)
             {
                 score = child_score;
+                alpha = child_score;
                 *best_move = column;
             }
         }
