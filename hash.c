@@ -3,7 +3,7 @@
 
 #include "funcs.h"
 
-#define HASH_TABLE_SIZE 10000000
+#define HASH_TABLE_SIZE 100000000
 
 
 typedef struct Input Input;
@@ -54,7 +54,7 @@ void make_input(long mask, long position, char score)
 {
     Input* input = get_input(mask, position, score);
     long hash = get_hash(input->key);
-    if (hash_table[hash]!=NULL)
+    if (hash_table[hash]!=NULL && input->score > hash_table[hash]->score)
     {
         free(hash_table[hash]);
     }

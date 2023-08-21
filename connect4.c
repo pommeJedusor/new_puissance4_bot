@@ -31,6 +31,11 @@ char deeper(long mask, long position, char local_deep, char alpha, char beta, ch
     {
         return -100;
     }
+    if (alpha >= beta)
+    {
+        //printf("alpha: %d\nbeta: %d\n",alpha, beta);
+        return beta;
+    }
     
     play(&position, &mask, move);
     int score = -100;
