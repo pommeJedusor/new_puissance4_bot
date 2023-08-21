@@ -50,6 +50,23 @@ char deeper(long mask, long position, char local_deep, char alpha, char beta, ch
         score = 0;
         return score;
     }
+    //check the forced move
+    int forced_move = get_forced_move(position, mask);
+    if (forced_move==3)
+    {
+        score = -(22 - ((local_deep+2)/2.0));
+        return score;
+    }
+    else if (forced_move!=0)
+    {
+        for (char i=0;i<7;i++)
+        {
+            if (forced_move == (1 << i))
+            {
+                return -deeper(mask, position, local_deep+1, -beta, -alpha, i);
+            }
+        }
+    }
     //check the hash table
     score = -100;
     get_score(mask, position, &alpha);

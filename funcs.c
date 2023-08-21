@@ -1,6 +1,39 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+void see_pos(long mask, long position)
+{
+    long mask_pos;
+    long copy_mask_grid = 0;
+    //not optimal
+    for (int y=1;y<7;y++)
+    {
+        for (int x=0;x<7;x++)
+        {
+            mask_pos = 1;
+            mask_pos = (mask_pos << (x*7+6-y));
+            //printf("mask: %ld\npos: %d\ntent: %d\n",mask_pos,(x*7+6-y),(1 << (x*7+6-y)));
+            //if case is empty
+            if ((mask_pos & mask) == 0)
+            {
+                printf("0");
+            }
+            else if ((mask_pos & position) == 0)
+            {
+                copy_mask_grid = position;
+                //printf("\npos: %d\nmask pos: %ld\ngridpos: %ld\n",(x*7+6-y),mask_pos,copy_mask_grid);
+                copy_mask_grid = mask;
+                //printf("gridmask: %ld\n",copy_mask_grid);
+                printf("2");
+            }
+            else
+            {
+                printf("1");
+            }
+        }
+        printf("\n");
+    }
+}
 
 char can_play(long mask, char column)
 {
@@ -49,4 +82,46 @@ char is_losing(long position, long mask)
     }
 
     return 0;
+}
+
+int get_forced_move(long position, long mask)
+{
+   long temp_position;
+   long temp_mask;
+   long columns = 0;
+   //check if winning moves
+   for (char i=0;i<7;i++)
+   {
+        temp_position = position;
+        temp_mask = mask;
+        if (can_play(temp_mask, i))
+        {
+            play(&temp_position, &temp_mask, i);
+            if (is_losing(temp_position, temp_mask))
+            {
+                columns = 1 << i;
+                return columns;
+            }
+        }
+   }
+   //check loosing moves
+   for (char i=0;i<7;i++)
+   {
+        temp_position = position ^ mask;
+        temp_mask = mask;
+        if (can_play(temp_mask, i))
+        {
+            play(&temp_position, &temp_mask, i);
+            if (is_losing(temp_position, temp_mask) && columns==0)
+            {
+                columns = 1 << i;
+            }
+            else if (is_losing(temp_position, temp_mask))
+            {
+                return 3;
+            }
+        }
+   }
+   //return 0 if no forced move else return the forced move
+   return columns;
 }
