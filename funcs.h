@@ -1,25 +1,8 @@
 #ifndef FUNCS_H
 #define FUNCS_H
 
-typedef struct Grid Grid;
-struct Grid
-{
-    long position: 49;
-    long mask: 49;
-    char local_deep;
-    //score=22 - nombre de coups joué par le joueur
-    char score;
-    char nb_children;
-    char alpha;
-    char beta;
-    Grid** children;
-};
-
-char can_play(Grid* grid, char column);
-void play(Grid* grid, char column);
-void see_grid(Grid* grid);
-char is_losing(Grid* grid);
-Grid* grid_init(char* game, char len_game);
-void make_child(Grid* grid, char move, Grid* child);
+char can_play(long mask, char column);
+void play(long* position, long* mask, char column);
+char is_losing(long position, long mask);
 
 #endif

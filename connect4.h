@@ -3,7 +3,7 @@
 #define CONNECT_FOUR_H
 
 char order_change(char i);
-void deeper(Grid* grid);
-int connect4(Grid* grid);
+char deeper(long mask, long position, char local_deep, char alpha, char beta, char column);
+int connect4(char* game, char len_game, char* best_move);
 
 #endif

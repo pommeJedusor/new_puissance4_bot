@@ -31,28 +31,28 @@ long get_hash(long key)
     return key;
 }
 
-long get_key(Grid* grid)
+long get_key(long mask, long position)
 {
     long key = 1;
     key = key | (key << 1);
     key = key | (key << 2);
     key = key | (key << 3);
-    key += grid->mask + grid->position;
+    key += mask + position;
     return key;
 }
 
-Input* get_input(Grid* grid)
+Input* get_input(long mask, long position, char score)
 {
     Input* input;
     input = malloc(sizeof(Input));
-    input->score = grid->score;
-    input->key = get_key(grid);
+    input->score = score;
+    input->key = get_key(mask, position);
     return input;
 }
 
-void make_input(Grid* grid)
+void make_input(long mask, long position, char score)
 {
-    Input* input = get_input(grid);
+    Input* input = get_input(mask, position, score);
     long hash = get_hash(input->key);
     if (hash_table[hash]!=NULL)
     {
@@ -61,20 +61,17 @@ void make_input(Grid* grid)
     hash_table[hash] = input;
 }
 
-char get_score(Grid* grid)
+char get_score(long mask, long position, char* alpha)
 {
-    Input* input = get_input(grid);
-    long hash = get_hash(input->key);
+    long key = get_key(mask, position);
+    long hash = get_hash(key);
     if (hash_table[hash]==NULL)
     {
-        free(input);
         return 0;
     }
-    if (hash_table[hash]->key == input->key)
+    if (hash_table[hash]->key == key)
     {
-        grid->alpha = hash_table[hash]->score;
-        free(input);
+        *alpha = hash_table[hash]->score;
         return 1;
     }
-    free(input);
 }

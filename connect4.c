@@ -23,55 +23,84 @@ char order_change(char i)
 }
 
 
-void deeper(Grid* grid)
+char deeper(long mask, long position, char local_deep, char alpha, char beta, char move)
 {
-    if (is_losing(grid))
+    play(&position, &mask, move);
+    int score = -100;
+    if (is_losing(position, mask))
     {
-        grid->score = -(22 - (grid->local_deep/2.0));
-        return;
+        score = -(22 - (local_deep/2.0));
+        return score;
     }
     //if last move
-    if (grid->local_deep==42)
+    if (local_deep==42)
     {
-        grid->score = 0;
-        return;
+        score = 0;
+        return score;
     }
     //check the hash table
-    grid->score = -100;
-    get_score(grid);
+    score = -100;
+    get_score(mask, position, &alpha);
     //else
     //make the move
-    Grid* child;
     char column;
-    char score;
+    int child_score;
     for (char i=0;i<7;i++)
     {
         column = order_change(i);
-        if (can_play(grid, column))
+        if (can_play(mask, column))
         {
-            child = malloc(sizeof(Grid));
-            make_child(grid, column, child);
-            deeper(child);
-            score = -child->score;
-            if (score > grid->score)
+            child_score = -deeper(mask, position, local_deep+1, -beta, -alpha, column);
+            if (child_score > score)
             {
-                grid->score = score;
+                score = child_score;
             }
-            if (score >= grid->beta)
+            if (child_score >= beta)
             {
-                return;
+                return child_score;
             }
-            if (score > grid->alpha)
+            if (child_score > alpha)
             {
-                grid->alpha = score;
-                make_input(grid);
+                alpha = child_score;
+                make_input(mask, position, alpha);
             }
         }
     }
+    return score;
 }
 
-int connect4(Grid* grid)
+int connect4(char* game, char len_game, char* best_move)
 {
-    deeper(grid);
-    return grid->score;
+    char score = -100;
+    char child_score;
+    char column;
+    long local_deep = len_game;
+    //alpha bet
+    long alpha = -100;
+    long beta = 100;
+    //clear the columns
+    long mask = 0;
+    long position = 0;
+    //play the moves
+    char move;
+    for (char i=0; i<len_game; i++)
+    {
+        move = game[i]-49;
+        play(&position, &mask, move);
+    }
+    for (char i=0;i<7;i++)
+    {
+        column = order_change(i);
+        if (can_play(mask, column))
+        {
+            child_score = -deeper(mask, position, local_deep+1, -beta, -alpha, column);
+            //printf("-child_score: %d\n",child_score);
+            if (child_score > score)
+            {
+                score = child_score;
+                *best_move = column;
+            }
+        }
+    }
+    return score;
 }

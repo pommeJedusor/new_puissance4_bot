@@ -10,9 +10,9 @@ struct Input
 
 void init_hash_table();
 long get_hash(long key);
-long get_key(Grid* grid);
-Input* get_input(Grid* grid);
-void make_input(Grid* grid);
-char get_score(Grid* grid);
+long get_key(long mask, long position);
+Input* get_input(long mask, long position, char score);
+void make_input(long mask, long position, char score);
+char get_score(long mask, long position, char* alpha);
 
 #endif
