@@ -9,8 +9,8 @@
 typedef struct Input Input;
 struct Input
 {
-    long key;
-    char score;
+    long key:32;
+    char score:8;
 };
 
 Input* hash_table[HASH_TABLE_SIZE];

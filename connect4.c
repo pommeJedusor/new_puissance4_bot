@@ -22,6 +22,38 @@ char order_change(char i)
 
 }
 
+char get_move(char* moves)
+{
+    char max=0;
+    char best=-1;
+    char first_zero=-1;
+    char column;
+    for (char i=0;i<7;i++)
+    {
+        column = order_change(i);
+        if (moves[column]>max)
+        {
+            best=column;
+            max = moves[column];
+        }
+        if (first_zero==-1 && moves[column]==0)
+        {
+            first_zero=column;
+        }
+    }
+    if (best==-1)
+    {
+        best = first_zero;
+    }
+    //if every moves are equal to zero
+    if (best==-1)
+    {
+        return best;
+    }
+    moves[best] = -1;
+    return best;
+}
+
 
 char deeper(long mask, long position, char local_deep, char alpha, char beta, char move)
 {
@@ -39,6 +71,7 @@ char deeper(long mask, long position, char local_deep, char alpha, char beta, ch
     
     play(&position, &mask, move);
     int score = -100;
+    //check if loosing
     if (is_losing(position, mask))
     {
         score = -(22 - (local_deep/2.0));
@@ -74,10 +107,11 @@ char deeper(long mask, long position, char local_deep, char alpha, char beta, ch
     //make the move
     char column;
     int child_score;
+    char* moves = get_moves(mask, position);
     for (char i=0;i<7;i++)
     {
-        column = order_change(i);
-        if (can_play(mask, column))
+        column = get_move(moves);
+        if (column!=-1)
         {
             child_score = -deeper(mask, position, local_deep+1, -beta, -alpha, column);
             if (child_score > score)
@@ -117,10 +151,11 @@ int connect4(char* game, char len_game, char* best_move)
         move = game[i]-49;
         play(&position, &mask, move);
     }
+    char* moves = get_moves(mask, position);
     for (char i=0;i<7;i++)
     {
-        column = order_change(i);
-        if (can_play(mask, column))
+        column = get_move(moves);
+        if (column!=-1)
         {
             child_score = -deeper(mask, position, local_deep+1, -beta, -alpha, column);
             //printf("-child_score: %d\n",child_score);

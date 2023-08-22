@@ -1,5 +1,78 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "funcs.h"
+
+char* get_moves(long mask, long position)
+{
+    unsigned long edit_position;
+    unsigned long edit_mask;
+    unsigned long temp_position;
+    char* moves = NULL;
+    moves = malloc(sizeof(char)*7);
+
+    for (char i=0;i<7;i++)
+    {
+        moves[i]=0;
+        if (!can_play(mask,i))
+        {
+            moves[i]=-2;
+            continue;
+        }
+        edit_position = position;
+        edit_mask = mask;
+        play(&edit_position, &edit_mask, i);
+        edit_position ^= edit_mask;
+        edit_mask = ~edit_mask;
+        //delete the one outside the grid
+        edit_mask <<=15;
+        edit_mask >>=15;
+        /*
+        3 décalages comme pour trouver les lignes complêtes
+        puis un décalage xor avex le mask
+        */
+        //vertical
+        temp_position = edit_position;
+        temp_position &= temp_position << 1;
+        temp_position &= temp_position << 1;
+        temp_position = (temp_position << 1) & edit_mask;
+        //count the number of lines
+        for (char j=0;temp_position;moves[i]++)
+        {
+            temp_position &= temp_position-1;
+        }
+        //horizontal
+        temp_position = edit_position;
+        temp_position &= temp_position << 7;
+        temp_position &= temp_position << 7;
+        temp_position = (temp_position << 7) & edit_mask;
+        //count the number of lines
+        for (char j=0;temp_position;moves[i]++)
+        {
+            temp_position &= temp_position-1;
+        }
+        //diagonal down right -> up left
+        temp_position = edit_position;
+        temp_position &= temp_position >> 6;
+        temp_position &= temp_position >> 6;
+        temp_position = (temp_position >> 6) & edit_mask;
+        //count the number of lines
+        for (char j=0;temp_position;moves[i]++)
+        {
+            temp_position &= temp_position-1;
+        }
+        //down left -> up right
+        temp_position = edit_position;
+        temp_position &= temp_position << 8;
+        temp_position &= temp_position << 8;
+        temp_position = (temp_position << 8) & edit_mask;
+        //count the number of lines
+        for (char j=0;temp_position;moves[i]++)
+        {
+            temp_position &= temp_position-1;
+        }
+    }
+    return moves;
+}
 
 void see_pos(long mask, long position)
 {

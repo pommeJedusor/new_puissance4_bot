@@ -4,8 +4,8 @@
 typedef struct Input Input;
 struct Input
 {
-    long key;
-    char score;
+    long key:32;
+    char score:8;
 };
 
 void init_hash_table();

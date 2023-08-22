@@ -9,9 +9,9 @@
 
 void main()
 {
-    
     init_hash_table();
-    char* game_1 = "44444432655555";
+    //char* game_1 = "2275634273633217117526375347415";
+    char* game_1 = "444444562";
     char move;
     int score = connect4(game_1, strlen(game_1), &move);
     printf("score: %d\nmove: %d\n", score, move);
@@ -22,4 +22,8 @@ void main()
     */
     //test_1();
     //test_3();
+    //test_2();
+    //test_4();
+    //test_5();
+    //test_6();
 }
